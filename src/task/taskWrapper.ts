@@ -28,6 +28,7 @@ export async function taskWrapper(
 
   if (!cacheHit) {
     try {
+      info(taskId, `started`);
       await profiler.run(() => fn(allPackages[pkg], context), taskId);
       const duration = process.hrtime(start);
       if (!isCacheTask(task)) {
