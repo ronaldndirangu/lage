@@ -1,6 +1,5 @@
 import { RunContext } from "../types/RunContext";
 import pGraph from "p-graph";
-import { generateCacheTasks } from "../cache/cacheTasks";
 import { reportSummary } from "../logger/reportSummary";
 import log from "npmlog";
 
@@ -8,8 +7,6 @@ export async function runTasks(context: RunContext) {
   const { profiler } = context;
 
   context.measures.start = process.hrtime();
-
-  generateCacheTasks(context);
 
   try {
     await pGraph(context.tasks, context.taskDepsGraph).run();

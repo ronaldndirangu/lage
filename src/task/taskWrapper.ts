@@ -2,7 +2,7 @@ import { TaskId } from "../types/Task";
 import { PackageInfo } from "workspace-tools";
 import { getPackageTaskFromId } from "./taskId";
 import { RunContext } from "../types/RunContext";
-import { cacheHits } from "../cache/backfill";
+import { cacheHits, computeTaskHash, fetchTaskCache } from "../cache/backfill";
 import { info } from "../logger";
 import { isCacheTask } from "../cache/cacheTasks";
 import { formatDuration } from "../logger/formatDuration";
@@ -18,7 +18,10 @@ export async function taskWrapper(
 
   const start = process.hrtime();
 
-  if (!cacheHits[pkg]) {
+  const hash = await computeTaskHash(allPackages[pkg], task, context);
+  const cacheHit = await fetchTaskCache(allPackages[pkg], task, context);
+
+  if (!cacheHit) {
     if (!isCacheTask(task)) {
       info(taskId, "started");
     }
