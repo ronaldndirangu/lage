@@ -88,6 +88,8 @@ export async function computeTaskHash(
       cacheConfig
     );
 
+    console.log(task, context.args, hash);
+
     taskHashes[getTaskId(info.name, task)] = hash;
   } catch (e) {
     log.error(`${info.name} computeHash`, e);
@@ -105,13 +107,9 @@ export async function fetchTaskCache(
   const hash = taskHashes[getTaskId(info.name, task)];
 
   try {
-    const cacheHit = await backfill.fetch(
-      packagePath,
-      hash,
-      logger,
-      cacheConfig
-    );
-    taskCacheHits[getTaskId(info.name, task)] = cacheHit;
+    const hit = await backfill.fetch(packagePath, hash, logger, cacheConfig);
+    console.log("fetch: ", task, hash, hit);
+    return hit;
   } catch (e) {
     log.error(`${info.name} fetchBackfill`, e);
   }
@@ -129,6 +127,7 @@ export async function putTaskCache(
 
   try {
     await backfill.put(packagePath, hash, logger, cacheConfig);
+    console.log("put: ", hash);
   } catch (e) {
     // sometimes outputGlob don't match any files, so skipping this
   }
