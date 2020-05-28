@@ -6,7 +6,7 @@ export function getCacheConfig(cwd: string, context: RunContext) {
   const defaultCacheConfig = createDefaultConfig(cwd);
 
   // in lage, default mode is to SKIP locally
-  defaultCacheConfig.cacheStorageConfig.provider = "local-skip";
+  defaultCacheConfig.cacheStorageConfig.provider = "local";
 
   const logger = makeLogger("warn");
   const envConfig = getEnvConfig(logger);
