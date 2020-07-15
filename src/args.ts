@@ -42,8 +42,6 @@ export function arrifyArgs(args: { [key: string]: string | string[] }) {
 }
 
 export function getPassThroughArgs(args: { [key: string]: string | string[] }) {
-  let result: string[] = [];
-
   const lageArgs = [
     "node",
     "scope",
@@ -56,6 +54,7 @@ export function getPassThroughArgs(args: { [key: string]: string | string[] }) {
     "only",
     "concurrency",
     "profile",
+    "_",
   ];
 
   const filtered: { [key: string]: string | string[] } = {};
@@ -66,9 +65,7 @@ export function getPassThroughArgs(args: { [key: string]: string | string[] }) {
     }
   }
 
-  result = result.concat(arrifyArgs(filtered));
-
-  return result;
+  return arrifyArgs(filtered);
 }
 
 export function parseArgs() {
